@@ -108,10 +108,16 @@ end
 function ProgressDisplay:expCheck()
   local console = self.console
   local total = 0
+  if not self.startTime then
+    self.startTime = os.time()
+  end
   local startTime = self.startTime
   local endTime = os.time()
-  local thisArea = gmcp.Room.Info.area
-  local thisRoom = gmcp.Room.Info.num
+  local thisArea, thisRoom = "Unknown", "Unknown"
+  if gmcp.Room and gmcp.Room.Info then
+    thisArea = gmcp.Room.Info.area
+    thisRoom = gmcp.Room.Info.num
+  end
   local areaExp = 0
   local roomExp = 0
   console:clear()
@@ -129,11 +135,14 @@ function ProgressDisplay:expCheck()
   local timeString = f"{days} days {hours} hours {minutes} minutes {seconds} seconds"
 
   local xph = total / (duration / 60 / 60)
-  local xpToLevel = tonumber(gmcp.Char.Vitals.maxxp) - tonumber(gmcp.Char.Vitals.xp)
-  local xpPercentGained = (total*100)/tonumber(gmcp.Char.Vitals.maxxp)
+  local xpToLevel, xpPercentGained = "Unknown", "Unknown"
+  if gmcp.Char and gmcp.Char.Vitals then
+    xpToLevel = tonumber(gmcp.Char.Vitals.maxxp) - tonumber(gmcp.Char.Vitals.xp)
+    xpPercentGained = string.format("%.2f", (total*100)/tonumber(gmcp.Char.Vitals.maxxp))
+  end
   local timeToLevel = "Infinity"
-  if xph > 0 then
-    timeToLevel = xpToLevel / xph
+  if xph > 1 then
+    timeToLevel = string.format("%.2f", xpToLevel / xph)
   end
 
   local readable_total = self.format_int(total)
@@ -143,9 +152,9 @@ function ProgressDisplay:expCheck()
   console:cecho(f[[
 <white>Area        : <green>{thisArea}
 <white>Time Period : <green>{timeString}
-<LightSlateBlue>Exp change  : {total<=0 and "<red>" or "<green>"}{readable_total} <green>({string.format("%.2f",xpPercentGained)}%)
-<LightSlateBlue>Exp/Hour    : {xph<=0 and "<red>" or "<green>"}{readable_xph}
-<LightSlateBlue>Hrs to Lvl  : <yellow>{string.format("%.2f",timeToLevel)} <green>hours
+<LightSlateBlue>Exp change  : {total<0 and "<red>" or "<green>"}{readable_total} <green>({xpPercentGained}%)
+<LightSlateBlue>Exp/Hour    : {xph<0 and "<red>" or "<green>"}{readable_xph}
+<LightSlateBlue>Hrs to Lvl  : <yellow>{timeToLevel} <green>hours
 ]])
 end
 
@@ -155,7 +164,10 @@ function ProgressDisplay:goldCheck()
   local total = 0
   local startTime = self.startTime
   local endTime = os.time()
-  local thisArea = gmcp.Room.Info.area:gsub("an unstable section of ","")
+  local thisArea = "Unknown"
+  if gmcp.Room and gmcp.Room.Info then
+    thisArea = gmcp.Room.Info.area:gsub("an unstable section of ","")
+  end
   local areaGold = 0
   for _, log in ipairs(goldLog) do
     if log.where.area == thisArea then
