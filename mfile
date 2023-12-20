@@ -1,0 +1,8 @@
+{
+  "package": "ProgressDisplayinator",
+  "version": "1.0.0",
+  "author": "demonnic",
+  "title": "Displays xp and gold per hour for Aetolia. Prolly works with other IREs too",
+  "icon": "computer.png",
+  "outputFile": true
+}

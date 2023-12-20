@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Experience",
+    "patterns":[
+      {
+        "pattern": "^Experience Gained\\: (.+) \\(",
+        "type": "regex"
+      }
+    ]
+  },
+  {
+    "name": "Gold",
+    "patterns": [
+      {
+        "pattern": "^\\[Gold\\]\\: You have (lost|gained) (\\d+) gold\\.$",
+        "type": "regex"
+      }
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Display Progress",
+    "regex": "^show progress$"
+  },
+  {
+    "name": "Reset Progress",
+    "regex": "^reset progress$"
+  }
+]
